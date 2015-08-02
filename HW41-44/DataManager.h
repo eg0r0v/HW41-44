@@ -10,6 +10,8 @@
 #import <CoreData/CoreData.h>
 #import <UIKit/UIKit.h>
 
+@class Student, Teacher, Course;
+
 @interface DataManager : NSObject
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
@@ -20,6 +22,10 @@
 - (NSURL *)applicationDocumentsDirectory;
 
 + (DataManager*) sharedManager;
+
+-(Student*)addRandomStudent;
+-(Teacher*)addRandomTeacher;
+-(Course*)addCourseWithName:(NSString*)name;
 
 -(void)generateEducationSphere;
 

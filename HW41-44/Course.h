@@ -2,7 +2,7 @@
 //  Course.h
 //  HW41-44
 //
-//  Created by Илья Егоров on 01.08.15.
+//  Created by Илья Егоров on 02.08.15.
 //  Copyright (c) 2015 Илья Егоров. All rights reserved.
 //
 
@@ -14,11 +14,16 @@
 @interface Course : NSManagedObject
 
 @property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSSet *lecturers;
 @property (nonatomic, retain) NSSet *students;
-@property (nonatomic, retain) Teacher *lecturer;
 @end
 
 @interface Course (CoreDataGeneratedAccessors)
+
+- (void)addLecturersObject:(Teacher *)value;
+- (void)removeLecturersObject:(Teacher *)value;
+- (void)addLecturers:(NSSet *)values;
+- (void)removeLecturers:(NSSet *)values;
 
 - (void)addStudentsObject:(Student *)value;
 - (void)removeStudentsObject:(Student *)value;

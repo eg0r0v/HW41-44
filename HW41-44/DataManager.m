@@ -54,6 +54,7 @@ static int namesCount = 50;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         manager = [[DataManager alloc] init];
+        [manager generateEducationSphere];
     });
     
     return manager;
@@ -79,6 +80,7 @@ static int namesCount = 50;
     
     student.firstName = firstNames[arc4random_uniform(namesCount)];
     student.lastName = lastNames[arc4random_uniform(namesCount)];
+    student.email = [[NSString stringWithFormat:@"%@-%@@gmail.com", student.firstName, student.lastName] lowercaseString];
     
     return student;
 }
@@ -168,7 +170,6 @@ static int namesCount = 50;
 -(void)generateEducationSphere{
     
     [self deleteAllObjects];
-    [self printAllObjects];
 
     NSArray* courses = @[[self addCourseWithName:@"iOS"],
                          [self addCourseWithName:@"Android"],
@@ -194,7 +195,7 @@ static int namesCount = 50;
         
         Teacher* teacher = [self addRandomTeacher];
         
-        NSInteger numberOfCourses = arc4random_uniform(5);
+        NSInteger numberOfCourses = 1 + arc4random_uniform(3);
         
         while ([teacher.courses count] < numberOfCourses) {
             Course* course = [courses objectAtIndex:arc4random_uniform(5)];
@@ -207,77 +208,6 @@ static int namesCount = 50;
     
     [self.managedObjectContext save:nil];
     [self printAllObjects];
-    
-    //
-    //    NSFetchRequest* request = [[NSFetchRequest alloc] init];
-    //
-    //    NSEntityDescription* description = [NSEntityDescription entityForName:@"Student"
-    //                                                   inManagedObjectContext:self.managedObjectContext];
-    //
-    //    [request setEntity:description];
-    //    [request setRelationshipKeyPathsForPrefetching:@[@"courses"]];
-    //
-    //    NSSortDescriptor* firstNameDescriptor = [[NSSortDescriptor alloc] initWithKey:@"firstName" ascending:YES];
-    //    NSSortDescriptor* lastNameDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastName" ascending:YES];
-    //
-    //    [request setSortDescriptors:@[firstNameDescriptor, lastNameDescriptor]];
-    //
-    //    NSArray* validNames = @[@"Vanetta", @"Trang", @"Willard"];
-    //    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"score > 3.0"
-    //                              " AND score <= 3.5 "
-    //                              "AND courses.@count >= 3 "
-    //                              "AND firstName IN %@", validNames];
-    //
-    //    [request setPredicate:predicate];
-    //
-    //
-    //    description = [NSEntityDescription entityForName:@"Course"
-    //                                                   inManagedObjectContext:self.managedObjectContext];
-    //
-    //    [request setEntity:description];
-    //
-    //    NSPredicate* predicate1 = [NSPredicate predicateWithFormat:@"@avg.students.score > 3"];
-    //
-    //    NSPredicate* predicate2 = [NSPredicate predicateWithFormat:@"SUBQUERY(students, $student, $student.car.modelName == %@).@count >= %d", @"BMW", 6];
-    //    [request setPredicate:predicate2];
-    //
-    //
-    //    [request setFetchBatchSize:20];
-    //    [request setFetchOffset:10];
-    //    [request setFetchLimit:35];
-    //
-    //    NSError* error = nil;
-    //    NSArray* resultArray = [self.managedObjectContext executeFetchRequest:request error:&error];
-    //
-    //    if ([resultArray count] > 0) {
-    //
-    //        Car* car = [resultArray firstObject];
-    //
-    //        [self.managedObjectContext deleteObject:car];
-    //        [self.managedObjectContext save:nil];
-    //    }
-    //
-    //    [self printArray:resultArray];
-    //
-    //    NSFetchRequest* request2 = [[self.managedObjectModel fetchRequestTemplateForName:@"FetchStudents"] copy];
-    //    //для дескрипторов
-    //
-    //
-    //    NSFetchRequest* request3 = [[NSFetchRequest alloc] init];
-    //    NSEntityDescription* description3 = [NSEntityDescription entityForName:@"Course" inManagedObjectContext:self.managedObjectContext];
-    //
-    //    [request3 setEntity:description3];
-    //
-    //    NSArray* resultArray1 = [self.managedObjectContext executeFetchRequest:request error:nil];
-    //
-    //    for (Course* course in resultArray1) {
-    //
-    //        NSLog(@"COURSE NAME = %@, BEST STUDENTS:", course.name);
-    //        [self printArray:course.bestStudents];
-    //        NSLog(@"BUSY STUDENTS:");
-    //        [self printArray:course.studentsWithManyCourses];
-    //    }
-    
 }
 
 
@@ -298,7 +228,7 @@ static int namesCount = 50;
     if (_managedObjectModel != nil) {
         return _managedObjectModel;
     }
-    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"_lesson41_CoreDataTest" withExtension:@"momd"];
+    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"HW41_44" withExtension:@"momd"];
     _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     return _managedObjectModel;
 }
@@ -312,7 +242,7 @@ static int namesCount = 50;
     // Create the coordinator and store
     
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"_lesson41_CoreDataTest.sqlite"];
+    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"HW41_44.sqlite"];
     NSError *error = nil;
     
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
